@@ -1,8 +1,12 @@
 const express = require('express');
+const mongoose = require('mongoose');
 const ejs = require('ejs');
 const path = require('path');
-
+const Photo = require('./models/Photo');
+  
 const app = express();
+
+mongoose.connect('mongodb://localhost/pcat-test-db');
 const port = 3000;
 
 
