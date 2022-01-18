@@ -55,6 +55,11 @@ app.post('/photos', async (req, res) => {
   });
 });
 
+app.get('/photos/edit/:id', async (req, res) => {
+  const photo = await Photo.findOne({ _id: req.params.id });
+  res.render('edit', { photo });
+});
+
 app.get('/photos/:id', async (req, res) => {
   //console.log(req.params.id);
   const photo = await Photo.findById(req.params.id);
