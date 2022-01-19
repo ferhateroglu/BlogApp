@@ -20,7 +20,9 @@ app.use(express.static('public')); //middleware ekleme
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json()); //json ile haberleşileceğini bildirme
 app.use(fileUpload());
-app.use(methodOverride('_method'));
+app.use(methodOverride('_method',{
+  methods:['POST', 'GET']
+}));
 
 app.get('/', async (req, res) => {
   const photos = await Photo.find({}).sort('-dateCreated');
@@ -69,6 +71,10 @@ app.put('/photos/:id', async (req, res) => {
   photo.save();
   res.redirect('/photos/' + photo._id);
 });
+
+app.delete('/photos/:id',(req,res) =>{
+  console.log(req.params.id);
+})
 
 app.get('/photos/:id', async (req, res) => {
   //console.log(req.params.id);
