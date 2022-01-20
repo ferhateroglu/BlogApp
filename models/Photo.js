@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
 
 //DB Conneciton
-mongoose.connect('mongodb://localhost/pcat-test-db');
 
 const photoSchema = new Schema({
   title: String,
