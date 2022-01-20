@@ -1,12 +1,11 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const fileUpload = require('express-fileupload');
-const fs = require('fs');
 const ejs = require('ejs');
-const path = require('path');
 const methodOverride = require('method-override');
+const photoController = require('./controllers/photoController');
+const pageContoller = require('./controllers/pageContoller');
 
-const Photo = require('./models/Photo');
 
 const app = express();
 
@@ -16,71 +15,23 @@ const port = 3000;
 //Template engine
 app.set('view engine', 'ejs');
 
-app.use(express.static('public')); //middleware ekleme
+// middlewares
+app.use(express.static('public'));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json()); //json ile haberleşileceğini bildirme
 app.use(fileUpload());
-app.use(methodOverride('_method',{
-  methods:['POST', 'GET']
-}));
+app.use(methodOverride('_method', { methods: ['POST', 'GET'] }));
 
-app.get('/', async (req, res) => {
-  const photos = await Photo.find({}).sort('-dateCreated');
-  res.render('index', {
-    photos: photos,
-  });
-});
+// Routes
+app.get('/', photoController.getAllPhotos);
+app.get('/photos/:id', photoController.getPhoto);
+app.put('/photos/:id', photoController.updatePhoto);
+app.delete('/photos/:id', photoController.deletePhoto);
+app.post('/photos', photoController.createPhoto);
 
-app.get('/about', (req, res) => {
-  res.render('about');
-});
-
-app.get('/add', (req, res) => {
-  res.render('add');
-});
-
-app.post('/photos', async (req, res) => {
-  const makeUploadDir = 'public/uploads';
-
-  if (!fs.existsSync(makeUploadDir)) {
-    fs.mkdirSync(makeUploadDir);
-  }
-
-  let uploadedImage = req.files.image;
-  let uploadPath = __dirname + '/public/uploads/' + uploadedImage.name;
-
-  uploadedImage.mv(uploadPath, async () => {
-    //file'ı dizine kaydetme ardından veri tabanına veri kaydetme
-    await Photo.create({
-      ...req.body,
-      image: '/uploads/' + uploadedImage.name,
-    });
-    res.redirect('/');
-  });
-});
-
-app.get('/photos/edit/:id', async (req, res) => {
-  const photo = await Photo.findOne({ _id: req.params.id });
-  res.render('edit', { photo });
-});
-
-app.put('/photos/:id', async (req, res) => {
-  const photo = await Photo.findOne({ _id: req.params.id });
-  photo.title = req.body.title;
-  photo.description = req.body.description;
-  photo.save();
-  res.redirect('/photos/' + photo._id);
-});
-
-app.delete('/photos/:id',(req,res) =>{
-  console.log(req.params.id);
-})
-
-app.get('/photos/:id', async (req, res) => {
-  //console.log(req.params.id);
-  const photo = await Photo.findById(req.params.id);
-  res.render('photo', { photo: photo });
-});
+app.get('/about', pageContoller.getAboutPage);
+app.get('/add', pageContoller.getAddPage);
+app.get('/photos/edit/:id', pageContoller.getEditPage);
 
 app.listen(port, () => {
   console.log(`sunucu ${port} portunda başlatıldı`);

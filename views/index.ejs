@@ -45,13 +45,20 @@
 
                     <!-- Catalog Paging Buttons -->
                     <div>
+                        <% if(pages > 0) { %>
                         <ul class="nav tm-paging-links">
-                            <li class="nav-item active"><a href="#" class="nav-link tm-paging-link">1</a></li>
-                            <li class="nav-item"><a href="#" class="nav-link tm-paging-link">2</a></li>
-                            <li class="nav-item"><a href="#" class="nav-link tm-paging-link">3</a></li>
-                            <li class="nav-item"><a href="#" class="nav-link tm-paging-link">4</a></li>
-                            <li class="nav-item"><a href="#" class="nav-link tm-paging-link">></a></li>
+                            <% for(let i = 1; i <= pages; i++){ %> 
+                                <% if(i == current){ %> 
+                                    <li class="nav-item active"><a href="/?page=<%= i %> " class="nav-link tm-paging-link"><%= i %> </a></li>
+                                <% }else{ %> 
+                                    <li class="nav-item"><a href="/?page=<%= i %> " class="nav-link tm-paging-link"><%= i %> </a></li>
+                                <% } %> 
+                                <% if(i == pages){ %> 
+                                    <li class="nav-item"><a href="/?page=<%= ((parseInt(current)+1) < pages) ? parseInt(current)+1 : pages %> " class="nav-link tm-paging-link">&gt</a></li>
+                                <% } %> 
+                            <% } %> 
                         </ul>
+                        <% } %>
                     </div>
                 </main>
 

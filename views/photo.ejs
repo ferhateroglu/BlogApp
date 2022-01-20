@@ -47,7 +47,7 @@ https://templatemo.com/tm-552-video-catalog
 									<a href="/photos/edit/<%= photo._id %>" class="btn btn-primary p-0 mb-4 tm-btn-animate tm-btn-download tm-icon-download text-light"><span>Update Details</span></a>	
 								</div>	
 								<div class="text-center">
-									<a href="/photos/<%= photo._id %>?_method=DELETE" class="btn btn-danger p-0 tm-btn-animate tm-btn-download tm-icon-download text-light"><span>Delete Photo</span></a>	
+									<a onclick="return confirm('are you sure?')" href="/photos/<%= photo._id %>?_method=DELETE" class="btn btn-danger p-0 tm-btn-animate tm-btn-download tm-icon-download text-light"><span>Delete Photo</span></a>	
 								</div>								
 							</div>
 						</div>
